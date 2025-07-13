@@ -157,9 +157,16 @@ local function showAuthSystem()
                 wait(1)
                 
                 -- Properly destroy the auth window
-                local window = game:GetService("CoreGui").ReGui.Windows.TabsWindow
-                if window then
-                    window:Destroy()
+                local coreGui = game:GetService("CoreGui")
+                if coreGui:FindFirstChild("ReGui") then
+                    local reGui = coreGui.ReGui
+                    if reGui:FindFirstChild("Windows") and reGui.Windows:FindFirstChild("TabsWindow") then
+                        reGui.Windows.TabsWindow:Destroy()
+                    end
+                    -- If TabsWindow destruction didn't work, destroy the entire ReGui
+                    if reGui:FindFirstChild("Windows") and reGui.Windows:FindFirstChild("TabsWindow") then
+                        reGui:Destroy()
+                    end
                 end
             else
                 addConsoleMessage("ERROR", "Authentication failed! Invalid key.")
