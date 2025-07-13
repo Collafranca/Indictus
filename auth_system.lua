@@ -39,7 +39,7 @@ local function showAuthSystem()
 
     local authenticated = false
     local Console = nil
-    local consoleContent = "<font color='#00BFFF'>[INFO]</font> Authentication system initialized.\n<font color='#00BFFF'>[INFO]</font> Please enter your access key in the Authentication tab."
+    local consoleContent = "<font color='#00BFFF'>●</font> [INFO] Authentication system initialized.\n<font color='#00BFFF'>●</font> [INFO] Please enter your access key in the Authentication tab."
     
     -- Create Authentication tab
     local AuthTab = AuthWindow:CreateTab({Name="Authentication"})
@@ -84,13 +84,13 @@ local function showAuthSystem()
         local coloredMessage = ""
         
         if messageType == "INFO" then
-            coloredMessage = "<font color='#00BFFF'>[INFO]</font> " .. message
+            coloredMessage = "<font color='#00BFFF'>●</font> [INFO] " .. message
         elseif messageType == "SUCCESS" then
-            coloredMessage = "<font color='#00FF00'>[SUCCESS]</font> " .. message
+            coloredMessage = "<font color='#00FF00'>●</font> [SUCCESS] " .. message
         elseif messageType == "ERROR" then
-            coloredMessage = "<font color='#FF0000'>[ERROR]</font> " .. message
+            coloredMessage = "<font color='#FF0000'>●</font> [ERROR] " .. message
         elseif messageType == "WARNING" then
-            coloredMessage = "<font color='#FFA500'>[WARNING]</font> " .. message
+            coloredMessage = "<font color='#FFA500'>●</font> [WARNING] " .. message
         else
             coloredMessage = message
         end
