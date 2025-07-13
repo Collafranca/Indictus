@@ -76,7 +76,6 @@ local function showAuthSystem()
         AutoScroll = true,
         MaxLines = 100,
         RichText = true,
-        TextWrapped = true,
         Value = consoleContent
     })
     
@@ -152,7 +151,7 @@ local function showAuthSystem()
     AuthTab:Separator()
     
     AuthTab:Label({
-        Text = "💡 Need a key? Join our Discord server!",
+        Text = "Need a key? Join our Discord server!",
         TextWrapped = true
     })
     
