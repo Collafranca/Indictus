@@ -55,6 +55,16 @@ local function encryptAndEncode(plainText, password)
     return encodeBase64(encrypted)
 end
 
+-- Debug function to test encryption
+local function testEncryption()
+    local testKey = "test123"  -- Replace with your actual key
+    local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
+    local result = encryptAndEncode(testKey, password)
+    print("Test key: " .. testKey)
+    print("Encrypted result: " .. result)
+    return result
+end
+
 local function authenticatePlayer(userKey)
     local success, response = pcall(function()
         return game:HttpGet('https://raw.githubusercontent.com/Collafranca/Indictus/refs/heads/main/Key')
@@ -152,6 +162,11 @@ local function showAuthSystem()
                 addConsoleMessage("ERROR", "Access key cannot be empty!")
                 return
             end
+            
+            -- Debug: Show what we're generating
+            local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
+            local encryptedKey = encryptAndEncode(keyInput:gsub("%s+", ""), password)
+            addConsoleMessage("INFO", "Generated encrypted key: " .. encryptedKey)
             
             if authenticatePlayer(keyInput) then
                 addConsoleMessage("SUCCESS", "Authentication successful!")
