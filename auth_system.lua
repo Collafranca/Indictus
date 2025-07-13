@@ -9,27 +9,22 @@ else
     error("Failed to load ReGui library: " .. tostring(result))
 end
 
--- XOR encryption with password
-local function xorEncrypt(text, password)
+-- Simple Caesar cipher with password-based shift
+local function simpleEncrypt(text, password)
     local result = ""
-    local passwordLength = #password
+    local passwordSum = 0
+    
+    -- Calculate sum of all characters in password for shift value
+    for i = 1, #password do
+        passwordSum = passwordSum + string.byte(password, i)
+    end
+    
+    local shift = passwordSum % 256  -- Keep shift reasonable
     
     for i = 1, #text do
-        local textByte = string.byte(text, i)
-        local passwordByte = string.byte(password, ((i - 1) % passwordLength) + 1)
-        
-        -- Manual XOR implementation for compatibility
-        local xorResult = 0
-        local a, b = textByte, passwordByte
-        for j = 0, 7 do
-            local bitA = math.floor(a / 2^j) % 2
-            local bitB = math.floor(b / 2^j) % 2
-            if bitA ~= bitB then
-                xorResult = xorResult + 2^j
-            end
-        end
-        
-        result = result .. string.char(xorResult)
+        local charByte = string.byte(text, i)
+        local shiftedByte = (charByte + shift) % 256
+        result = result .. string.char(shiftedByte)
     end
     
     return result
@@ -51,18 +46,8 @@ end
 
 -- Combined encrypt and encode function
 local function encryptAndEncode(plainText, password)
-    local encrypted = xorEncrypt(plainText, password)
+    local encrypted = simpleEncrypt(plainText, password)
     return encodeBase64(encrypted)
-end
-
--- Debug function to test encryption
-local function testEncryption()
-    local testKey = "test123"  -- Replace with your actual key
-    local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
-    local result = encryptAndEncode(testKey, password)
-    print("Test key: " .. testKey)
-    print("Encrypted result: " .. result)
-    return result
 end
 
 local function authenticatePlayer(userKey)
@@ -74,19 +59,11 @@ local function authenticatePlayer(userKey)
         local cleanResponse = response:gsub("%s+", "")
         local cleanUserKey = userKey:gsub("%s+", "")
         
-        -- XOR encrypt with password then Base64 encode
+        -- Encrypt with password then Base64 encode
         local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
         local encryptedAndEncodedKey = encryptAndEncode(cleanUserKey, password)
 
-        -- Debug output
-        print("DEBUG - User key: " .. cleanUserKey)
-        print("DEBUG - Generated encrypted: " .. encryptedAndEncodedKey)
-        print("DEBUG - GitHub response: " .. cleanResponse)
-        print("DEBUG - Match: " .. tostring(encryptedAndEncodedKey == cleanResponse))
-
         return encryptedAndEncodedKey == cleanResponse
-    else
-        print("DEBUG - Failed to fetch key from GitHub")
     end
 
     return false
