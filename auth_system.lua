@@ -1,4 +1,13 @@
-local ReGui = loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
+local ReGui
+local success, result = pcall(function()
+    return loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
+end)
+
+if success then
+    ReGui = result
+else
+    error("Failed to load ReGui library: " .. tostring(result))
+end
 
 -- XOR encryption with password
 local function xorEncrypt(text, password)
@@ -8,7 +17,18 @@ local function xorEncrypt(text, password)
     for i = 1, #text do
         local textByte = string.byte(text, i)
         local passwordByte = string.byte(password, ((i - 1) % passwordLength) + 1)
-        local xorResult = textByte ~ passwordByte -- XOR operation
+        
+        -- Manual XOR implementation for compatibility
+        local xorResult = 0
+        local a, b = textByte, passwordByte
+        for j = 0, 7 do
+            local bitA = math.floor(a / 2^j) % 2
+            local bitB = math.floor(b / 2^j) % 2
+            if bitA ~= bitB then
+                xorResult = xorResult + 2^j
+            end
+        end
+        
         result = result .. string.char(xorResult)
     end
     
