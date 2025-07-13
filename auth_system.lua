@@ -31,36 +31,17 @@ local function authenticatePlayer(userKey)
 end
 
 local function showAuthSystem()
-    -- Debug: Check if ReGui is loaded properly
-    if not ReGui then
-        error("ReGui failed to load!")
-    end
-    
-    -- Debug: Check if TabsWindow method exists
-    if not ReGui.TabsWindow then
-        error("TabsWindow method not found in ReGui!")
-    end
-    
     -- Create tabs window following the exact pattern
     local AuthWindow = ReGui:TabsWindow({
         Title = "Indictus Authentication",
         Size = UDim2.fromOffset(500, 350)
     })
-    
-    -- Debug: Check if window was created
-    if not AuthWindow then
-        error("Failed to create TabsWindow!")
-    end
-    
-    print("[DEBUG] TabsWindow created successfully")
 
     local authenticated = false
     local Console = nil
     
     -- Create Authentication tab
     local AuthTab = AuthWindow:CreateTab({Name="Authentication"})
-    
-    print("[DEBUG] Authentication tab created")
     
     AuthTab:Label({
         Text = "Welcome to Indictus Authentication System",
