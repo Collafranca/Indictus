@@ -39,6 +39,7 @@ local function showAuthSystem()
 
     local authenticated = false
     local Console = nil
+    local consoleContent = "[INFO] Authentication system initialized.\n[INFO] Please enter your access key in the Authentication tab."
     
     -- Create Authentication tab
     local AuthTab = AuthWindow:CreateTab({Name="Authentication"})
@@ -74,22 +75,28 @@ local function showAuthSystem()
         ReadOnly = true,
         AutoScroll = true,
         MaxLines = 100,
-        Value = "[INFO] Authentication system initialized.\n[INFO] Please enter your access key in the Authentication tab."
+        Value = consoleContent
     })
+    
+    -- Helper function to add console messages
+    local function addConsoleMessage(message)
+        consoleContent = consoleContent .. "\n" .. message
+        Console:SetValue(consoleContent)
+    end
 
     AuthTab:Button({
         Text = "Authenticate",
         Callback = function()
-            Console:AppendText("[INFO] Attempting authentication...")
+            addConsoleMessage("[INFO] Attempting authentication...")
             
             if keyInput == "" then
-                Console:AppendText("[ERROR] Access key cannot be empty!")
+                addConsoleMessage("[ERROR] Access key cannot be empty!")
                 return
             end
             
             if authenticatePlayer(keyInput) then
-                Console:AppendText("[SUCCESS] Authentication successful!")
-                Console:AppendText("[INFO] Loading main application...")
+                addConsoleMessage("[SUCCESS] Authentication successful!")
+                addConsoleMessage("[INFO] Loading main application...")
                 authenticated = true
                 
                 -- Small delay to show success message
@@ -101,8 +108,8 @@ local function showAuthSystem()
                     window:Destroy()
                 end
             else
-                Console:AppendText("[ERROR] Authentication failed! Invalid key.")
-                Console:AppendText("[INFO] Please check your key and try again.")
+                addConsoleMessage("[ERROR] Authentication failed! Invalid key.")
+                addConsoleMessage("[INFO] Please check your key and try again.")
             end
         end
     })
@@ -110,8 +117,8 @@ local function showAuthSystem()
     AuthTab:Button({
         Text = "Cancel",
         Callback = function()
-            Console:AppendText("[INFO] Authentication cancelled by user.")
-            Console:AppendText("[INFO] Exiting application...")
+            addConsoleMessage("[INFO] Authentication cancelled by user.")
+            addConsoleMessage("[INFO] Exiting application...")
             
             -- Small delay to show cancellation message
             wait(1)
@@ -136,7 +143,7 @@ local function showAuthSystem()
     AuthTab:Button({
         Text = "Copy Discord Invite",
         Callback = function()
-            Console:AppendText("[INFO] Discord invite copied to clipboard!")
+            addConsoleMessage("[INFO] Discord invite copied to clipboard!")
             if setclipboard then
                 setclipboard("https://discord.gg/wgSjANmXPZ")
             end
