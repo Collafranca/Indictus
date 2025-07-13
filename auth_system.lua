@@ -156,11 +156,8 @@ local function showAuthSystem()
                 -- Small delay to show success message
                 wait(1)
                 
-                ReGui:SetFocusedWindow(nil)
-                local window = game:GetService("CoreGui").ReGui.Windows.TabsWindow
-                if window then
-                    window:Destroy()
-                end
+                -- Properly destroy the auth window
+                AuthWindow:Destroy()
             else
                 addConsoleMessage("ERROR", "Authentication failed! Invalid key.")
                 addConsoleMessage("INFO", "Please check your key and try again.")
