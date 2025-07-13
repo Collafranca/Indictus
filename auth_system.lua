@@ -78,7 +78,15 @@ local function authenticatePlayer(userKey)
         local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
         local encryptedAndEncodedKey = encryptAndEncode(cleanUserKey, password)
 
+        -- Debug output
+        print("DEBUG - User key: " .. cleanUserKey)
+        print("DEBUG - Generated encrypted: " .. encryptedAndEncodedKey)
+        print("DEBUG - GitHub response: " .. cleanResponse)
+        print("DEBUG - Match: " .. tostring(encryptedAndEncodedKey == cleanResponse))
+
         return encryptedAndEncodedKey == cleanResponse
+    else
+        print("DEBUG - Failed to fetch key from GitHub")
     end
 
     return false
