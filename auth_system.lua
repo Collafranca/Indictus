@@ -52,10 +52,13 @@ local function showAuthSystem()
 
     AuthWindow:Separator()
 
+    local authenticated = false
+
     AuthWindow:Button({
         Text = "Authenticate",
         Callback = function()
             if authenticatePlayer(keyInput) then
+                authenticated = true
                 ReGui:SetFocusedWindow(nil)
                 local window = game:GetService("CoreGui").ReGui.Windows.Window
                 if window then
@@ -78,6 +81,14 @@ local function showAuthSystem()
             error("Authentication cancelled.")
         end
     })
+
+    -- Wait for authentication to complete
+    repeat
+        wait(0.1)
+    until authenticated
+
+    -- Small delay to ensure window is fully destroyed
+    wait(0.2)
 end
 
 showAuthSystem()
