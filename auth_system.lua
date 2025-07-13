@@ -74,22 +74,22 @@ local function showAuthSystem()
         ReadOnly = true,
         AutoScroll = true,
         MaxLines = 100,
-        Value = "[INFO] Authentication system initialized.\n[INFO] Please enter your access key in the Authentication tab.\n"
+        Value = "[INFO] Authentication system initialized.\n[INFO] Please enter your access key in the Authentication tab."
     })
 
     AuthTab:Button({
         Text = "Authenticate",
         Callback = function()
-            Console:AppendText("[INFO] Attempting authentication...\n")
+            Console:AppendText("\n[INFO] Attempting authentication...")
             
             if keyInput == "" then
-                Console:AppendText("[ERROR] Access key cannot be empty!\n")
+                Console:AppendText("\n[ERROR] Access key cannot be empty!")
                 return
             end
             
             if authenticatePlayer(keyInput) then
-                Console:AppendText("[SUCCESS] Authentication successful!\n")
-                Console:AppendText("[INFO] Loading main application...\n")
+                Console:AppendText("\n[SUCCESS] Authentication successful!")
+                Console:AppendText("\n[INFO] Loading main application...")
                 authenticated = true
                 
                 -- Small delay to show success message
@@ -101,8 +101,8 @@ local function showAuthSystem()
                     window:Destroy()
                 end
             else
-                Console:AppendText("[ERROR] Authentication failed! Invalid key.\n")
-                Console:AppendText("[INFO] Please check your key and try again.\n")
+                Console:AppendText("\n[ERROR] Authentication failed! Invalid key.")
+                Console:AppendText("\n[INFO] Please check your key and try again.")
             end
         end
     })
@@ -110,8 +110,8 @@ local function showAuthSystem()
     AuthTab:Button({
         Text = "Cancel",
         Callback = function()
-            Console:AppendText("[INFO] Authentication cancelled by user.\n")
-            Console:AppendText("[INFO] Exiting application...\n")
+            Console:AppendText("\n[INFO] Authentication cancelled by user.")
+            Console:AppendText("\n[INFO] Exiting application...")
             
             -- Small delay to show cancellation message
             wait(1)
@@ -136,7 +136,7 @@ local function showAuthSystem()
     AuthTab:Button({
         Text = "Copy Discord Invite",
         Callback = function()
-            Console:AppendText("[INFO] Discord invite copied to clipboard!\n")
+            Console:AppendText("\n[INFO] Discord invite copied to clipboard!")
             if setclipboard then
                 setclipboard("https://discord.gg/wgSjANmXPZ")
             end
