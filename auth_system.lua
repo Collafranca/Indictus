@@ -1,25 +1,16 @@
-local ReGui
-local success, result = pcall(function()
-    return loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
-end)
+-- Load ReGui library
+local ReGui = loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
 
-if success then
-    ReGui = result
-else
-    error("Failed to load ReGui library: " .. tostring(result))
-end
-
--- Simple Caesar cipher with password-based shift
+-- Caesar cipher encryption
 local function simpleEncrypt(text, password)
     local result = ""
     local passwordSum = 0
     
-    -- Calculate sum of all characters in password for shift value
     for i = 1, #password do
         passwordSum = passwordSum + string.byte(password, i)
     end
     
-    local shift = passwordSum % 256  -- Keep shift reasonable
+    local shift = passwordSum % 256
     
     for i = 1, #text do
         local charByte = string.byte(text, i)
@@ -30,6 +21,7 @@ local function simpleEncrypt(text, password)
     return result
 end
 
+-- Base64 encoding
 local function encodeBase64(data)
     local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     return ((data:gsub('.', function(x) 
@@ -44,12 +36,13 @@ local function encodeBase64(data)
     end)..({ '', '==', '=' })[#data%3+1])
 end
 
--- Combined encrypt and encode function
+-- Encrypt and encode key
 local function encryptAndEncode(plainText, password)
     local encrypted = simpleEncrypt(plainText, password)
     return encodeBase64(encrypted)
 end
 
+-- Authenticate user key
 local function authenticatePlayer(userKey)
     local success, response = pcall(function()
         return game:HttpGet('https://raw.githubusercontent.com/Collafranca/Indictus/refs/heads/main/Key')
@@ -58,29 +51,24 @@ local function authenticatePlayer(userKey)
     if success then
         local cleanResponse = response:gsub("%s+", "")
         local cleanUserKey = userKey:gsub("%s+", "")
-        
-        -- Encrypt with password then Base64 encode
         local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
-        local encryptedAndEncodedKey = encryptAndEncode(cleanUserKey, password)
-
-        return encryptedAndEncodedKey == cleanResponse
+        local encryptedKey = encryptAndEncode(cleanUserKey, password)
+        return encryptedKey == cleanResponse
     end
 
     return false
 end
 
+-- Main authentication GUI
 local function showAuthSystem()
-    -- Create tabs window following the exact pattern
     local AuthWindow = ReGui:TabsWindow({
         Title = "Indictus Authentication",
         Size = UDim2.fromOffset(500, 350)
     })
 
     local authenticated = false
-    local Console = nil
     local consoleContent = "<font color='#00BFFF'>[INFO]</font> Authentication system initialized.\n<font color='#00BFFF'>[INFO]</font> Please enter your access key in the Authentication tab."
     
-    -- Create Authentication tab
     local AuthTab = AuthWindow:CreateTab({Name="Authentication"})
     
     AuthTab:Label({
@@ -106,10 +94,9 @@ local function showAuthSystem()
 
     AuthTab:Separator()
     
-    -- Create Console tab
     local ConsoleTab = AuthWindow:CreateTab({Name="Console"})
     
-    Console = ConsoleTab:Console({
+    local Console = ConsoleTab:Console({
         LineNumbers = true,
         ReadOnly = true,
         AutoScroll = true,
@@ -118,7 +105,6 @@ local function showAuthSystem()
         Value = consoleContent
     })
     
-    -- Helper function to add colored console messages
     local function addConsoleMessage(messageType, message)
         local coloredMessage = ""
         
@@ -181,13 +167,17 @@ local function showAuthSystem()
             addConsoleMessage("INFO", "Authentication cancelled by user.")
             addConsoleMessage("INFO", "Exiting application...")
             
-            -- Small delay to show cancellation message
             wait(1)
             
-            ReGui:SetFocusedWindow(nil)
-            local window = game:GetService("CoreGui").ReGui.Windows.TabsWindow
-            if window then
-                window:Destroy()
+            local coreGui = game:GetService("CoreGui")
+            if coreGui:FindFirstChild("ReGui") then
+                local reGui = coreGui.ReGui
+                if reGui:FindFirstChild("Windows") and reGui.Windows:FindFirstChild("TabsWindow") then
+                    reGui.Windows.TabsWindow:Destroy()
+                end
+                if reGui:FindFirstChild("Windows") and reGui.Windows:FindFirstChild("TabsWindow") then
+                    reGui:Destroy()
+                end
             end
             error("Authentication cancelled.")
         end
