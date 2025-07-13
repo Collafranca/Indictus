@@ -89,6 +89,7 @@ local function showAuthSystem()
 
     -- Small delay to ensure window is fully destroyed
     wait(0.2)
+    return authenticated
 end
 
-showAuthSystem()
+return showAuthSystem()
