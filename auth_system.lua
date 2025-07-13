@@ -140,7 +140,7 @@ local function showAuthSystem()
                 authenticated = true
                 
                 -- Small delay to show success message
-                wait(1)
+                task.wait(1)
                 
                 -- Properly destroy the auth window
                 local coreGui = game:GetService("CoreGui")
@@ -167,7 +167,7 @@ local function showAuthSystem()
             addConsoleMessage("INFO", "Authentication cancelled by user.")
             addConsoleMessage("INFO", "Exiting application...")
             
-            wait(1)
+            task.wait(1)
             
             local coreGui = game:GetService("CoreGui")
             if coreGui:FindFirstChild("ReGui") then
@@ -203,11 +203,11 @@ local function showAuthSystem()
 
     -- Wait for authentication to complete
     repeat
-        wait(0.1)
+        task.wait(0.1)
     until authenticated
 
     -- Small delay to ensure window is fully destroyed
-    wait(0.2)
+    task.wait(0.2)
     return authenticated
 end
 
