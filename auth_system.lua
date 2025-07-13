@@ -148,12 +148,6 @@ local function showAuthSystem()
                 return
             end
             
-            -- Debug: Show what we're generating
-            local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
-            local encryptedKey = encryptAndEncode(keyInput:gsub("%s+", ""), password)
-            addConsoleMessage("INFO", "Generated encrypted key: " .. encryptedKey)
-            addConsoleMessage("INFO", "Input key: " .. keyInput)
-            
             if authenticatePlayer(keyInput) then
                 addConsoleMessage("SUCCESS", "Authentication successful!")
                 addConsoleMessage("INFO", "Loading main application...")
