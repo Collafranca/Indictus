@@ -76,6 +76,7 @@ local function showAuthSystem()
         AutoScroll = true,
         MaxLines = 100,
         RichText = true,
+        TextWrapped = true,
         Value = consoleContent
     })
     
