@@ -1,5 +1,20 @@
 local ReGui = loadstring(game:HttpGet('https://raw.githubusercontent.com/depthso/Dear-ReGui/refs/heads/main/ReGui.lua'))()
 
+-- XOR encryption with password
+local function xorEncrypt(text, password)
+    local result = ""
+    local passwordLength = #password
+    
+    for i = 1, #text do
+        local textByte = string.byte(text, i)
+        local passwordByte = string.byte(password, ((i - 1) % passwordLength) + 1)
+        local xorResult = textByte ~ passwordByte -- XOR operation
+        result = result .. string.char(xorResult)
+    end
+    
+    return result
+end
+
 local function encodeBase64(data)
     local chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
     return ((data:gsub('.', function(x) 
@@ -14,6 +29,12 @@ local function encodeBase64(data)
     end)..({ '', '==', '=' })[#data%3+1])
 end
 
+-- Combined encrypt and encode function
+local function encryptAndEncode(plainText, password)
+    local encrypted = xorEncrypt(plainText, password)
+    return encodeBase64(encrypted)
+end
+
 local function authenticatePlayer(userKey)
     local success, response = pcall(function()
         return game:HttpGet('https://raw.githubusercontent.com/Collafranca/Indictus/refs/heads/main/Key')
@@ -22,9 +43,12 @@ local function authenticatePlayer(userKey)
     if success then
         local cleanResponse = response:gsub("%s+", "")
         local cleanUserKey = userKey:gsub("%s+", "")
-        local encodedUserKey = encodeBase64(cleanUserKey)
+        
+        -- XOR encrypt with password then Base64 encode
+        local password = "Defensive6-Exodus4-Sullen7-Vowel7-Kitchen7"
+        local encryptedAndEncodedKey = encryptAndEncode(cleanUserKey, password)
 
-        return encodedUserKey == cleanResponse
+        return encryptedAndEncodedKey == cleanResponse
     end
 
     return false
